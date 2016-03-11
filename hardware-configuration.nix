@@ -52,6 +52,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/home/minecraft/erisia/dynmap/web/tiles" =
+    { device = "storage/home/minecraft/dynmap-tiles";
+      fsType = "zfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/ee79a0d3-7a79-4251-a885-df8b49680113"; }
     ];
