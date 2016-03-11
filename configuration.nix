@@ -65,12 +65,24 @@ in
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
+  # Gitlab
+  services.gitlab = {
+    enable = true;
+    emailFrom = "svein@madoka.brage.info";
+    port = 443;
+    https = true;
+    databasePassword = (import ./gitlab-pw.nix).db;
+    initialRootPassword = (import ./gitlab-pw.nix).root;
+  };
+
   ## Email & cron ##
   services.cron.enable = true;
   services.cron.mailto = "svein";
   services.postfix.enable = true;
 
   ## Users ##
+  users.defaultUserShell = "/run/current-system/sw/bin/zsh";
+
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
@@ -106,6 +118,8 @@ in
   users.extraUsers.jmc = {
     isNormalUser = true; 
     uid = 1003;
+    extraGroups = [ "wheel" ];
+    shell = "/run/current-system/sw/bin/bash";
     openssh.authorizedKeys.keys = sshKeys.jmc;
   };
   users.extraUsers.kim = {
@@ -138,6 +152,16 @@ in
         "status.brage.info" = null;
         "znc.brage.info" = null;
         "alertmanager.brage.info" = null;
+        "map.brage.info" = null;
+        "cache.brage.info" = null;
+        "incognito.brage.info" = null;
+        "promdash.brage.info" = null;
+        "quest.brage.info" = null;
+        "tigersight.brage.info" = null;
+        "w2.brage.info" = null;
+        "warmroast.brage.info" = null;
+        "wiki.brage.info" = null;
+        "gitlab.brage.info" = null;
       };
     };
   };
@@ -151,10 +175,17 @@ in
   nix.extraOptions = "auto-optimise-store = true";
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";
+  nix.gc.options = "--delete-older-than 14d";
   environment.systemPackages = with pkgs; [
     tcpdump psmisc atop gdb stack wget file zip mosh irssi links screen telnet unison
-    gitAndTools.gitFull mutt jdk unzip imagemagick parallel moreutils vim nix-repl whois
-    znc
+    git mutt openjdk unzip imagemagick parallel moreutils vim nix-repl whois
+    znc bsdgames shared_mime_info
     prometheus prometheus-node-exporter prometheus-alertmanager prometheus-nginx-exporter
   ];
+  programs.zsh.enable = true;
+
+  # Workaround for inpure's server.
+  networking.extraHosts = ''
+    0.0.0.0 files.inpureprojects.info
+  '';
 }

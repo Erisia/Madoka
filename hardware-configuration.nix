@@ -8,7 +8,7 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
@@ -20,11 +20,6 @@
   fileSystems."/nix" =
     { device = "storage/nixos/nix";
       fsType = "zfs";
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4969110d-851b-40bd-9c54-082388286457";
-      fsType = "btrfs";
     };
 
   fileSystems."/home" =
@@ -39,6 +34,21 @@
 
   fileSystems."/home/svein" =
     { device = "storage/home/svein";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/4969110d-851b-40bd-9c54-082388286457";
+      fsType = "btrfs";
+    };
+
+  fileSystems."/var/gitlab" =
+    { device = "storage/var/gitlab";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/db/postgresql" =
+    { device = "storage/var/postgresql";
       fsType = "zfs";
     };
 
