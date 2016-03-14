@@ -21,6 +21,8 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      # Various Minecraft-relevant jobs.
+      ./minecraft.nix
     ];
 
   ## Boot ##
