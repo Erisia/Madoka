@@ -88,7 +88,7 @@ in
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "docker" ];
     openssh.authorizedKeys.keys = sshKeys.svein;
   };
   users.extraUsers.minecraft = {
@@ -167,6 +167,10 @@ in
       };
     };
   };
+
+  ## Docker
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "zfs";
 
 
   # The NixOS release to be compatible with for stateful data such as databases.
