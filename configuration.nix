@@ -33,8 +33,11 @@ in
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
   # Emergency shell in case of failure.
+  boot.initrd.network.enable = true;
   boot.initrd.network.ssh.enable = true;
   boot.initrd.network.ssh.authorizedKeys = sshKeys.svein;
+  # Start up if at all possible.
+  systemd.enableEmergencyMode = false;
 
   boot.cleanTmpDir = true;
 
