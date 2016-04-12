@@ -89,8 +89,8 @@ in
 
   # Gitlab
   services.gitlab = {
-    enable = true;
-    emailFrom = "svein@madoka.brage.info";
+    enable = false;
+    # emailFrom = "svein@madoka.brage.info";
     port = 443;
     https = true;
     databasePassword = (import ./gitlab-pw.nix).db;
