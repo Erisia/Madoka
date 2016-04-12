@@ -201,7 +201,7 @@ in
   system.autoUpgrade.enable = true;
   nix.extraOptions = "auto-optimise-store = true";
   nix.gc.automatic = true;
-  nix.gc.dates = "03:15";
+  nix.gc.dates = "Thu 03:15";
   nix.gc.options = "--delete-older-than 14d";
   environment.systemPackages = with pkgs; [
     tcpdump psmisc atop gdb stack wget file zip mosh irssi links screen telnet unison
