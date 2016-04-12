@@ -44,6 +44,23 @@ in
   ## Networking ##
   networking.hostName = "madoka.brage.info";
   networking.hostId = "f7fcf93e";
+  networking.defaultGateway = "148.251.151.193";
+  # Doesn't work due to missing interface specification.
+  #networking.defaultGateway6 = "fe80::1";
+  networking.localCommands = ''
+    /run/current-system/sw/bin/route -6 add default gw fe80::1 dev enp2s0
+  '';
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  networking.interfaces.enp2s0 = {
+    ip4 = [{
+      address = "148.251.151.200";
+      prefixLength = 27;
+    }];
+    ip6 = [{
+      address = "2a01:4f8:210:50c7::2";
+      prefixLength = 64;
+    }];
+  };
   networking.firewall = {
     allowPing = true;
     allowedTCPPorts = [ 80 443 25565 4000 12345 ];
