@@ -57,6 +57,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/home/minecraft/incognito/dynmap/web/tiles" =
+    { device = "storage/home/minecraft/dynmap-incognito-tiles";
+      fsType = "zfs";
+    };
+
   fileSystems."/var/lib/docker" =
     { device = "storage/docker";
       fsType = "zfs";

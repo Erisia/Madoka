@@ -38,6 +38,7 @@ in
   boot.initrd.network.enable = true;
   boot.initrd.network.ssh.enable = true;
   boot.initrd.network.ssh.authorizedKeys = sshKeys.svein;
+  boot.initrd.network.ssh.hostDSSKey = /etc/nixos/ssh_initrd_host_key;
   # Start up if at all possible.
   systemd.enableEmergencyMode = false;
 
@@ -65,8 +66,9 @@ in
   };
   networking.firewall = {
     allowPing = true;
-    allowedTCPPorts = [ 80 443 25565 4000 12345 ];
+    allowedTCPPorts = [ 80 443 25565 25566 4000 12345 ];
   };
+  networking.firewall.allowedUDPPortRanges = [{from = 60000; to = 61000;}];
 
   ## Security ##
   security.sudo.wheelNeedsPassword = false;
