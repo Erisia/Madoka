@@ -23,8 +23,6 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # Various Minecraft-relevant jobs.
-      ./minecraft.nix
     ];
 
   ## Boot ##
@@ -86,6 +84,7 @@ in
   ## Services ##
   services.zfs.autoSnapshot.enable = true;
   services.locate.enable = true;
+  services.atd.enable = true;
 
   # SSH
   services.openssh.enable = true;
@@ -118,6 +117,7 @@ in
   users.extraUsers.minecraft = {
     isNormalUser = true;
     uid = 1000;
+    extraGroups = [ "atd" ];
     openssh.authorizedKeys.keys = builtins.concatLists (lib.attrValues sshKeys);
   };
   users.extraUsers.bloxgate = {
