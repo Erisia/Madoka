@@ -117,7 +117,7 @@ in
   users.extraUsers.minecraft = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "atd" ];
+    extraGroups = [ ];
     openssh.authorizedKeys.keys = builtins.concatLists (lib.attrValues sshKeys);
   };
   users.extraUsers.bloxgate = {
