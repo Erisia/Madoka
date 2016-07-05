@@ -111,7 +111,7 @@ in
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = sshKeys.svein;
   };
   users.extraUsers.minecraft = {
@@ -194,9 +194,8 @@ in
   };
 
   ## Docker
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "zfs";
-
+  #virtualisation.docker.enable = true;
+  #virtualisation.docker.storageDriver = "zfs";
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "16.03";
@@ -214,6 +213,7 @@ in
     prometheus prometheus-node-exporter prometheus-alertmanager prometheus-nginx-exporter
   ];
   programs.zsh.enable = true;
+  nixpkgs.config.allowUnfree = true;
 
   # Workaround for inpure's server.
   networking.extraHosts = ''

@@ -62,11 +62,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/var/lib/docker" =
-    { device = "storage/docker";
-      fsType = "zfs";
-    };
-
   swapDevices =
     [ { device = "/dev/disk/by-uuid/ee79a0d3-7a79-4251-a885-df8b49680113"; }
     ];
