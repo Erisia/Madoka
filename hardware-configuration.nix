@@ -27,8 +27,13 @@
       fsType = "zfs";
     };
 
-  fileSystems."/home/minecraft" =
-    { device = "storage/home/minecraft";
+  fileSystems."/var/db/postgresql" =
+    { device = "storage/var/postgresql";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/gitlab" =
+    { device = "storage/var/gitlab";
       fsType = "zfs";
     };
 
@@ -37,18 +42,8 @@
       fsType = "zfs";
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4969110d-851b-40bd-9c54-082388286457";
-      fsType = "btrfs";
-    };
-
-  fileSystems."/var/gitlab" =
-    { device = "storage/var/gitlab";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/db/postgresql" =
-    { device = "storage/var/postgresql";
+  fileSystems."/home/minecraft" =
+    { device = "storage/home/minecraft";
       fsType = "zfs";
     };
 
@@ -62,9 +57,19 @@
       fsType = "zfs";
     };
 
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/4969110d-851b-40bd-9c54-082388286457";
+      fsType = "btrfs";
+    };
+
+  fileSystems."/var/lib/docker" =
+    { device = "storage/var-lib-docker";
+      fsType = "zfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/ee79a0d3-7a79-4251-a885-df8b49680113"; }
     ];
 
-  nix.maxJobs = 8;
+  nix.maxJobs = lib.mkDefault 8;
 }
