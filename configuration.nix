@@ -49,7 +49,7 @@ in
   # Doesn't work due to missing interface specification.
   #networking.defaultGateway6 = "fe80::1";
   networking.localCommands = ''
-    /run/current-system/sw/bin/route -6 add default gw fe80::1 dev enp2s0
+    ${pkgs.nettools}/bin/route -6 add default gw fe80::1 dev enp2s0
   '';
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
   networking.interfaces.enp2s0 = {
@@ -111,7 +111,7 @@ in
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "docker" ];
     openssh.authorizedKeys.keys = sshKeys.svein;
   };
   users.extraUsers.minecraft = {
@@ -194,8 +194,9 @@ in
   };
 
   ## Docker
-  #virtualisation.docker.enable = true;
-  #virtualisation.docker.storageDriver = "zfs";
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "zfs";
+  virtualisation.docker.socketActivation = false;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "16.03";
