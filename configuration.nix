@@ -15,7 +15,7 @@ let sshKeys = {
   kim = [ "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEA3j9muBMkqIAQ8BLBK5Ki4I1l2gg//Yt/YLmZd6nAaqYO4OeZ50k7x4F1OFRnyWScDqb4C5XggG8FaBQVe5RfP43sKDFx6F9En/zPB0JwbWT7iVXlZHFLLqqZ+vzrEmEYexQSwftpR1neKWb39fZjOcZTvd7Tk3sGNbnr/0LMYW0= kim@localhost" ];
   buizerd = [ "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhD/TX8mV0yCbuVsSE8Nno9YLBIMccUKmmEK4Ps1z77D+mi9F6HeaLFJ9FGIvhZ1BVChCJrNTNsTSqRcHLoDye3IsQa080mwhK2hRYPpKPhpa8/Y1zXP6bk6oePVeZDHR1tMgkRJzM/8kOpgNKRKIcdtFU7KWvCWywAeLi8BjrLE3fHU1a2I3ZrT4FUintgjtYVPD7p3m7AEsx4nvqOCxHqlt04i175bwvQ4HVgFzNYgQX9oQw4NgPfDsCCNXkDcVBwZNakUu8q9guHbjWO+1IXvUwfTUEk3pRpbM3glbWzba2PXJA+xM4/NYhZbfXqsXY8vMOmkC0Z54gVEN07s8lw== buizerd@localhost" ];
   luke = [ "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAgEClqIZgCTdObRDyG/0x+/72Ugbv1tqDjBIdmWbq4htd9I4WP2SWMh5r73L0DUVqs6HYS2JusFN8NSFDKEIr19LPuirrmq/TcdJBeEN25IMZSs2xId5gjhxxp/NloNyh6tQ4ketpi8cyWz2KqHX5wHjk52k2QOQ461jY/qZJ1eqDkwXA1Fxm0CbJw6HkfFhDLfEffsev2Duei/3M7joy5NxATZTeKZ/BG9yCEG9/oDsR3i3PUssMtZ2D98bLqTpU0i+WuSXZDZHZTd8nRv6f7ZndFGCldoQcSc4g/QH7qP40xjzN2jVeolQ5dI8cAhb1JeykRURskcA9GPkCb4HhBRHHuPN+w1rEbFSV1APsxjOV5T2628om78VX37cwrFT/lP6HP9f31B6oXu9hUTGNRnSI6bxKAF3TmqWsZgffHZ84wInW2sGV4lIAYKiMbnd/DanxsIkqbzWHigAmj04tSi3nbB6Jm+qtLg0TPkn29KFQW7kCwAZ7qKTmaWocbzWtyvA8Y1TNlzMJfT0vQ9dRh3onvPVLZwcVI/4dUFrGhJGREHJJ/Po1ZFry3ugE7rJ5FplrVC4AmJLWliVXacDvn+zbwIZHxbzUY/+xuPphvSq+kXoi6yjxTSYRnm1Xl6MAHF817kMypE+DYafCItxvJHklAdDc5zoXQ6p9I8BrTevsAU= castone22@gmail.com" ];
-  
+  vindex = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoFU4rmBlaVsQj/odpzWYtBu4j4TDQpNTTpkAIxQ+Qu/uikMkdq/CrSERgE+fPd6KLHz7nBCA5wIGoP0GDOCF/OShyP4F9KoQeCcuT1s2+rQBpRG3wjOftPil8V6Rw3dl5lLFcmyKDtNUpTQupenyH+nzlmBIJ9OPB5y7CIxulk+MgdA8dHF9IROGnfevJe4SkMdJixu4lgaGSx7JHztnq1RRN86FCIhtrc4qBJfbSwcrL3r3yGOK+trdXt2WAf1smXsskTmEAhpUnFrY5t74g9zfzmDJapnpxpUmAEY1N5Xg4xICAEOzma4Gi1CT8NRvUfsb/IkPUGfartASvRVbB" ];  
 };
 in
 
@@ -23,6 +23,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./minecraft.nix
     ];
 
   ## Boot ##
@@ -31,7 +32,7 @@ in
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.devices = [ "/dev/sda" "/dev/sdb" ];
   # Emergency shell in case of failure.
   boot.initrd.network.enable = true;
   boot.initrd.network.ssh.enable = true;
@@ -39,26 +40,27 @@ in
   boot.initrd.network.ssh.hostDSSKey = /etc/nixos/ssh_initrd_host_key;
   # Start up if at all possible.
   systemd.enableEmergencyMode = false;
+  # Set noop elevator to make ZFS a little faster.
+  boot.postBootCommands = ''
+    echo noop > /sys/block/sda/queue/scheduler
+    echo noop > /sys/block/sdb/queue/scheduler
+  '';
 
   boot.cleanTmpDir = true;
 
   ## Networking ##
   networking.hostName = "madoka.brage.info";
   networking.hostId = "f7fcf93e";
-  networking.defaultGateway = "148.251.151.193";
+  networking.defaultGateway = "138.201.133.1";
   # Doesn't work due to missing interface specification.
   #networking.defaultGateway6 = "fe80::1";
   networking.localCommands = ''
-    ${pkgs.nettools}/bin/route -6 add default gw fe80::1 dev enp2s0
+    ${pkgs.nettools}/bin/route -6 add default gw fe80::1 dev enp0s31f6
   '';
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-  networking.interfaces.enp2s0 = {
-    ip4 = [{
-      address = "148.251.151.200";
-      prefixLength = 27;
-    }];
+  networking.interfaces.enp0s31f6 = {
     ip6 = [{
-      address = "2a01:4f8:210:50c7::2";
+      address = "2a01:4f8:172:3065::2";
       prefixLength = 64;
     }];
   };
@@ -84,7 +86,6 @@ in
   ## Services ##
   services.zfs.autoSnapshot.enable = true;
   services.locate.enable = true;
-  services.atd.enable = true;
 
   # SSH
   services.openssh.enable = true;
@@ -123,7 +124,7 @@ in
   users.extraUsers.bloxgate = {
     isNormalUser = true;
     uid = 1001;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ ];
     openssh.authorizedKeys.keys = sshKeys.bloxgate;
   };
   users.extraUsers.buizerd = {
@@ -134,7 +135,7 @@ in
   users.extraUsers.darqen27 = {
     isNormalUser = true; 
     uid = 1007;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ ];
     openssh.authorizedKeys.keys = sshKeys.darqen27;
   };
   users.extraUsers.david = {
@@ -144,7 +145,7 @@ in
   users.extraUsers.jmc = {
     isNormalUser = true; 
     uid = 1003;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ ];
     shell = "/run/current-system/sw/bin/bash";
     openssh.authorizedKeys.keys = sshKeys.jmc;
   };
@@ -157,12 +158,20 @@ in
   users.extraUsers.luke = {
     isNormalUser = true; 
     uid = 1006;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ ];
   };
   users.extraUsers.simplynoire = {
     isNormalUser = true; 
     uid = 1009;
   };
+
+  users.extraUsers.vindex = {
+    isNormalUser = true; 
+    uid = 1011;
+    extraGroups = [ ];
+    openssh.authorizedKeys.keys=sshKeys.vindex;
+  };
+
 
   ## Webserver ##
   services.nginx.enable = true;
@@ -194,9 +203,9 @@ in
   };
 
   ## Docker
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "zfs";
-  virtualisation.docker.socketActivation = false;
+  # virtualisation.docker.enable = true;
+  # virtualisation.docker.storageDriver = "zfs";
+  # virtualisation.docker.socketActivation = false;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "16.03";
@@ -211,7 +220,6 @@ in
     tcpdump psmisc atop gdb stack wget file zip mosh irssi links screen telnet unison
     git mutt openjdk unzip imagemagick parallel moreutils vim nix-repl whois
     znc bsdgames shared_mime_info
-    prometheus prometheus-node-exporter prometheus-alertmanager prometheus-nginx-exporter
   ];
   programs.zsh.enable = true;
   nixpkgs.config.allowUnfree = true;

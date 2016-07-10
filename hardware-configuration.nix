@@ -8,67 +8,72 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "storage/nixos";
+    { device = "tank/nixos";
       fsType = "zfs";
     };
 
   fileSystems."/nix" =
-    { device = "storage/nixos/nix";
+    { device = "tank/nixos/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var" =
+    { device = "tank/nixos/var";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/lib/docker" =
+    { device = "tank/nixos/var/lib-docker";
       fsType = "zfs";
     };
 
   fileSystems."/home" =
-    { device = "storage/home";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/db/postgresql" =
-    { device = "storage/var/postgresql";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/gitlab" =
-    { device = "storage/var/gitlab";
-      fsType = "zfs";
-    };
-
-  fileSystems."/home/svein" =
-    { device = "storage/home/svein";
+    { device = "tank/home";
       fsType = "zfs";
     };
 
   fileSystems."/home/minecraft" =
-    { device = "storage/home/minecraft";
+    { device = "tank/home/minecraft";
       fsType = "zfs";
     };
 
-  fileSystems."/home/minecraft/erisia/dynmap/web/tiles" =
-    { device = "storage/home/minecraft/dynmap-tiles";
+  fileSystems."/home/minecraft/erisia" =
+    { device = "tank/home/minecraft/erisia";
       fsType = "zfs";
     };
 
-  fileSystems."/home/minecraft/incognito/dynmap/web/tiles" =
-    { device = "storage/home/minecraft/dynmap-incognito-tiles";
+  fileSystems."/home/minecraft/erisia/dynmap" =
+    { device = "tank/home/minecraft/erisia/dynmap";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/minecraft/incognito" =
+    { device = "tank/home/minecraft/incognito";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/minecraft/incognito/dynmap" =
+    { device = "tank/home/minecraft/incognito/dynmap";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/svein" =
+    { device = "tank/home/svein";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4969110d-851b-40bd-9c54-082388286457";
+    { device = "/dev/disk/by-uuid/c68b0eab-859b-40ff-aad6-3619814cd017";
       fsType = "btrfs";
     };
 
-  fileSystems."/var/lib/docker" =
-    { device = "storage/var-lib-docker";
-      fsType = "zfs";
-    };
-
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/ee79a0d3-7a79-4251-a885-df8b49680113"; }
+    [ { device = "/dev/zd0"; }
     ];
 
   nix.maxJobs = lib.mkDefault 8;
