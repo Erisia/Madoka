@@ -208,7 +208,7 @@ in
   ## Software ##
   system.autoUpgrade.enable = true;
   nix.extraOptions = "auto-optimise-store = true";
-  nix.gc.automatic = true;
+  nix.gc.automatic = false;
   nix.gc.dates = "Thu 03:15";
   nix.gc.options = "--delete-older-than 14d";
   environment.systemPackages = with pkgs; [
