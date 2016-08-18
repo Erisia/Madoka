@@ -150,6 +150,7 @@ in
     isNormalUser = true; 
     uid = 1006;
     extraGroups = [ ];
+    openssh.authorizedKeys.keys = sshKeys.luke;
   };
   users.extraUsers.simplynoire = {
     isNormalUser = true; 
@@ -215,7 +216,7 @@ in
     tcpdump psmisc gdb stack wget file zip irssi links telnet unison
     git mutt openjdk unzip imagemagick parallel moreutils vim nix-repl whois
     znc bsdgames shared_mime_info nox emacs24-nox hdparm nmap sysstat 
-    screen atop
+    screen atop rsync
   ];
   programs.zsh.enable = true;
   programs.mosh.enable = true;
