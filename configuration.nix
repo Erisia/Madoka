@@ -34,6 +34,23 @@ in
     echo noop > /sys/block/sdb/queue/scheduler
   '';
 
+  # Reserve huge pages for Minecraft.
+  boot.kernelParams = [
+    "hugepages=4096"
+  ];
+  boot.kernel.sysctl = {
+    "kernel.shmmax" = 12884901888;
+    "vm.hugetlb_shm_group" = 100;  # users
+  };
+  security.pam.loginLimits = [
+    {
+      domain = "minecraft";
+      type = "-";
+      item = "memlock";
+      value = "16777216";
+    }
+   ];
+
   boot.cleanTmpDir = true;
 
   ## Networking ##
