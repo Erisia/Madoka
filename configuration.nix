@@ -92,7 +92,7 @@ in
   time.timeZone = "Europe/Dublin";
 
   ## Services ##
-  services.zfs.autoSnapshot.enable = true;
+  #services.zfs.autoSnapshot.enable = true;
   services.locate.enable = true;
 
   # SSH
@@ -229,11 +229,12 @@ in
   nix.gc.automatic = false;
   nix.gc.dates = "Thu 03:15";
   nix.gc.options = "--delete-older-than 14d";
+  nix.useSandbox = true;
   environment.systemPackages = with pkgs; [
     tcpdump psmisc gdb stack wget file zip irssi links telnet unison
     git mutt openjdk unzip imagemagick parallel moreutils vim nix-repl whois
     znc bsdgames shared_mime_info nox emacs24-nox hdparm nmap sysstat 
-    screen atop rsync
+    screen atop rsync znapzend
   ];
   programs.zsh.enable = true;
   programs.mosh.enable = true;
