@@ -203,7 +203,7 @@ in
         "map.brage.info" = null;
         "cache.brage.info" = null;
         "incognito.brage.info" = null;
-        "promdash.brage.info" = null;
+        "grafana.brage.info" = null;
         "quest.brage.info" = null;
         "tigersight.brage.info" = null;
         "w2.brage.info" = null;
