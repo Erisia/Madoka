@@ -233,8 +233,13 @@ in
   environment.systemPackages = with pkgs; [
     tcpdump psmisc gdb stack wget file zip irssi links telnet unison
     git mutt openjdk unzip imagemagick parallel moreutils vim nix-repl whois
-    znc bsdgames shared_mime_info nox emacs24-nox hdparm nmap sysstat 
+    znc bsdgames shared_mime_info nox hdparm nmap sysstat 
     screen atop rsync znapzend
+    (emacsWithPackages (p: with p; [
+       column-marker nyan-mode smex ein js2-mode js3-mode
+       multiple-cursors flyspell-lazy yasnippet buffer-move helm
+       color-theme flycheck magit nix-mode gradle-mode lua-mode
+    ]))
   ];
   programs.zsh.enable = true;
   programs.mosh.enable = true;
