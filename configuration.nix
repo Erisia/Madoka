@@ -229,7 +229,7 @@ in
   nix.gc.automatic = false;
   nix.gc.dates = "Thu 03:15";
   nix.gc.options = "--delete-older-than 14d";
-  nix.useSandbox = true;
+  nix.useSandbox = "relaxed";
   environment.systemPackages = with pkgs; [
     tcpdump psmisc gdb stack wget file zip irssi links telnet unison
     git mutt openjdk unzip imagemagick parallel moreutils vim nix-repl whois
