@@ -117,6 +117,7 @@ in
   ## Users ##
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
 
+  # Next free ID: 1014.
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
@@ -128,6 +129,13 @@ in
     uid = 1000;
     extraGroups = [ ];
     openssh.authorizedKeys.keys = builtins.concatLists (lib.attrValues sshKeys);
+  };
+  users.extraUsers.tppi = {
+    isNormalUser = true;
+    uid = 1013;
+    openssh.authorizedKeys.keys = builtins.concatLists [
+      sshKeys.svein sshKeys.kim sshKeys.luke
+    ];
   };
   users.extraUsers.bloxgate = {
     isNormalUser = true;
