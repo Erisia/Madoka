@@ -219,6 +219,7 @@ in
         "wiki.brage.info" = null;
         "gitlab.brage.info" = null;
         "matter.brage.info" = null;
+        "tppi.brage.info" = null;
       };
     };
   };
