@@ -195,32 +195,80 @@ in
 
 
   ## Webserver ##
-  services.nginx.enable = true;
-  services.nginx.httpConfig = builtins.readFile ./nginx/nginx.cfg;
-  security.acme.certs = {
-    "madoka.brage.info" = {
-      webroot = "/var/spool/nginx/letsencrypt";
-      email = "sveina@gmail.com";
-      user = "nginx";
-      group = "nginx";
-      postRun = "systemctl reload nginx.service";
-      extraDomains = {
-        "status.brage.info" = null;
-        "znc.brage.info" = null;
-        "alertmanager.brage.info" = null;
-        "map.brage.info" = null;
-        "cache.brage.info" = null;
-        "incognito.brage.info" = null;
-        "grafana.brage.info" = null;
-        "quest.brage.info" = null;
-        "tigersight.brage.info" = null;
-        "w2.brage.info" = null;
-        "warmroast.brage.info" = null;
-        "wiki.brage.info" = null;
-        "gitlab.brage.info" = null;
-        "matter.brage.info" = null;
-        "tppi.brage.info" = null;
+  services.nginx = {
+    enable = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    sslDhparam = ./nginx/dhparams.pem;
+    statusPage = true;
+    appendHttpConfig = ''
+      add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
+      add_header X-Clacks-Overhead "GNU Terry Pratchett";
+      autoindex on;
+
+      # Fallback config for Erisia
+      upstream erisia {
+        server localhost:8123;
+	server unix:/home/minecraft/erisia/staticmap.sock backup;
+      }
+      server {
+        listen unix:/home/minecraft/erisia/staticmap.sock;
+	location / {
+	  root /home/minecraft/erisia/dynmap/web;
+	}
+      }
+      # Ditto, Incognito.
+      # TODO: Factor this. Perhaps send a PR or two.
+      upstream incognito {
+        server localhost:8124;
+	server unix:/home/minecraft/incognito/staticmap.sock backup;
+      }
+      server {
+        listen unix:/home/minecraft/incognito/staticmap.sock;
+	location / {
+	  root /home/minecraft/incognito/dynmap/web;
+	}
+      }
+      
+    '';
+    virtualHosts = let
+      base = locations: {
+        forceSSL = true;
+	enableACME = true;
+        inherit locations;
       };
+      proxy = port: base {
+        "/".proxyPass = "http://localhost:" + toString(port) + "/";
+      };
+      root = dir: base {
+        "/".root = dir;
+      };
+    in {
+      "madoka.brage.info" = base {
+        "/" = {
+	  root = "/home/minecraft/web";
+	  tryFiles = "\$uri \$uri/ =404";
+	};
+	"/warmroast" = {
+	  proxyPass = "http://localhost:23000/";
+	};
+	"/baughn" = {
+	  extraConfig = "alias /home/svein/web;";
+	};
+	"/tppi" = {
+	  extraConfig = "alias /home/tppi/web;";
+	};
+      } // { default = true; };
+      "status.brage.info" = proxy 9090;
+      "tppi.brage.info" = root "/home/tppi/web";
+      "alertmanager.brage.info" = proxy 9093;
+      "map.brage.info" = base { "/".proxyPass = "http://erisia"; };
+      "incognito.brage.info" = base { "/".proxyPass = "http://incognito"; };
+      "cache.brage.info" = root "/home/svein/web/cache";
+      "znc.brage.info" = proxy 4000;
+      "quest.brage.info" = proxy 2222;
     };
   };
 
