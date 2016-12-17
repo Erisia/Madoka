@@ -256,24 +256,6 @@ in
 
 #  zramSwap.enable = true;
 
-  # VPN
-  services.openvpn = {
-    servers = {
-      server = {
-        config = ''
-          dev tun
-          ifconfig 10.8.0.1 10.8.0.2
-          secret /root/static.key
-          comp-lzo
-        '';
-        up = "ip route add ...";
-        down = "ip route del ...";
-	autoStart = true;
-      };
-    };
-    
-  };
-
   # Workaround for inpure's server.
   networking.extraHosts = ''
     0.0.0.0 files.inpureprojects.info
