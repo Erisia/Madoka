@@ -251,15 +251,9 @@ in
 	  root = "/home/minecraft/web";
 	  tryFiles = "\$uri \$uri/ =404";
 	};
-	"/warmroast" = {
-	  proxyPass = "http://localhost:23000/";
-	};
-	"/baughn" = {
-	  extraConfig = "alias /home/svein/web;";
-	};
-	"/tppi" = {
-	  extraConfig = "alias /home/tppi/web;";
-	};
+	"/warmroast".proxyPass = "http://localhost:23000/";
+	"/baughn".extraConfig = "alias /home/svein/web;";
+	"/tppi".extraConfig = "alias /home/tppi/web;";
       } // { default = true; };
       "status.brage.info" = proxy 9090;
       "tppi.brage.info" = root "/home/tppi/web";
