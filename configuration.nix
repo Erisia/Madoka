@@ -117,12 +117,17 @@ in
   ## Users ##
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
 
-  # Next free ID: 1014.
+  # Next free ID: 1015.
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
     extraGroups = [ "wheel" "docker" ];
     openssh.authorizedKeys.keys = sshKeys.svein;
+  };
+  users.extraUsers.einsig = {
+    isNormalUser = true;
+    uid = 1014;
+    openssh.authorizedKeys.keys = sshKeys.einsig;
   };
   users.extraUsers.minecraft = {
     isNormalUser = true;
@@ -294,6 +299,9 @@ in
   ];
   programs.zsh.enable = true;
   programs.mosh.enable = true;
+  programs.nano.nanorc = ''
+    set nowrap
+  '';
   nixpkgs.config.allowUnfree = true;
 
 #  zramSwap.enable = true;
