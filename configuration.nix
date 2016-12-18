@@ -71,7 +71,7 @@ in
   };
   networking.firewall = {
     allowPing = true;
-    allowedTCPPorts = [ 80 443 25565 25566 4000 12345 ];
+    allowedTCPPorts = [ 80 443 25565 25566 25567 4000 12345 ];
     allowedUDPPorts = [
       34197 # Factorio
     ];
@@ -117,7 +117,7 @@ in
   ## Users ##
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
 
-  # Next free ID: 1015.
+  # Next free ID: 1016.
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
@@ -129,6 +129,11 @@ in
     uid = 1014;
     openssh.authorizedKeys.keys = sshKeys.einsig;
   };
+  users.extraUsers.prospector = {
+    isNormalUser = true;
+    uid = 1015;
+    openssh.authorizedKeys.keys = sshKeys.prospector;
+  };
   users.extraUsers.minecraft = {
     isNormalUser = true;
     uid = 1000;
@@ -139,7 +144,7 @@ in
     isNormalUser = true;
     uid = 1013;
     openssh.authorizedKeys.keys = builtins.concatLists [
-      sshKeys.svein sshKeys.kim sshKeys.luke
+      sshKeys.svein sshKeys.kim sshKeys.luke sshKeys.prospector
     ];
   };
   users.extraUsers.bloxgate = {
@@ -215,7 +220,7 @@ in
 
       # Fallback config for Erisia
       upstream erisia {
-        server localhost:8123;
+        server 127.0.0.1:8123;
 	server unix:/home/minecraft/erisia/staticmap.sock backup;
       }
       server {
@@ -227,7 +232,7 @@ in
       # Ditto, Incognito.
       # TODO: Factor this. Perhaps send a PR or two.
       upstream incognito {
-        server localhost:8124;
+        server 127.0.0.1:8124;
 	server unix:/home/minecraft/incognito/staticmap.sock backup;
       }
       server {
@@ -268,6 +273,7 @@ in
       "cache.brage.info" = root "/home/svein/web/cache";
       "znc.brage.info" = proxy 4000;
       "quest.brage.info" = proxy 2222;
+      "warmroast.brage.info" = proxy 23000;
     };
   };
 
@@ -280,7 +286,7 @@ in
   system.stateVersion = "16.03";
 
   ## Software ##
-  system.autoUpgrade.enable = true;
+  #system.autoUpgrade.enable = true;
   nix.extraOptions = "auto-optimise-store = true";
   nix.gc.automatic = false;
   nix.gc.dates = "Thu 03:15";
