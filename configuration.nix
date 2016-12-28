@@ -241,6 +241,16 @@ in
 	  root /home/minecraft/incognito/dynmap/web;
 	}
       }
+      upstream tppi {
+        server 127.0.0.1:8126;
+        server unix:/home/tppi/server/staticmap.sock backup;
+      }
+      server {
+        listen unix:/home/tppi/server/staticmap.sock;
+        location / {
+          root /home/tppi/server/dynmap/web;
+        }
+      }
       
     '';
     virtualHosts = let
@@ -270,6 +280,7 @@ in
       "alertmanager.brage.info" = proxy 9093;
       "map.brage.info" = base { "/".proxyPass = "http://erisia"; };
       "incognito.brage.info" = base { "/".proxyPass = "http://incognito"; };
+      "tppi-map.brage.info" = base { "/".proxyPass = "http://tppi"; };
       "cache.brage.info" = root "/home/svein/web/cache";
       "znc.brage.info" = proxy 4000;
       "quest.brage.info" = proxy 2222;
