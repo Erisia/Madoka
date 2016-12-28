@@ -27,38 +27,13 @@
       fsType = "zfs";
     };
 
-  fileSystems."/var/lib/docker" =
-    { device = "tank/nixos/var/lib-docker";
-      fsType = "zfs";
-    };
-
   fileSystems."/home" =
     { device = "tank/home";
       fsType = "zfs";
     };
 
-  fileSystems."/home/minecraft" =
-    { device = "tank/home/minecraft";
-      fsType = "zfs";
-    };
-
-  fileSystems."/home/minecraft/erisia" =
-    { device = "tank/home/minecraft/erisia";
-      fsType = "zfs";
-    };
-
-  fileSystems."/home/minecraft/erisia/dynmap" =
-    { device = "tank/home/minecraft/erisia/dynmap";
-      fsType = "zfs";
-    };
-
-  fileSystems."/home/minecraft/incognito" =
-    { device = "tank/home/minecraft/incognito";
-      fsType = "zfs";
-    };
-
-  fileSystems."/home/minecraft/incognito/dynmap" =
-    { device = "tank/home/minecraft/incognito/dynmap";
+  fileSystems."/var/lib/docker" =
+    { device = "tank/nixos/var/lib-docker";
       fsType = "zfs";
     };
 
@@ -67,14 +42,57 @@
       fsType = "zfs";
     };
 
+  fileSystems."/home/minecraft" =
+    { device = "tank/home/minecraft";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/minecraft/incognito" =
+    { device = "tank/home/minecraft/incognito";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/minecraft/erisia" =
+    { device = "tank/home/minecraft/erisia";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/minecraft/incognito/dynmap" =
+    { device = "tank/home/minecraft/incognito/dynmap";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/minecraft/erisia/dynmap" =
+    { device = "tank/home/minecraft/erisia/dynmap";
+      fsType = "zfs";
+    };
+
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/c68b0eab-859b-40ff-aad6-3619814cd017";
       fsType = "btrfs";
     };
 
-  swapDevices =
-    [ { device = "/dev/zd0"; }
-    ];
+  fileSystems."/home/xgas" =
+    { device = "tank/home/xgas";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/tppi" =
+    { device = "tank/home/tppi";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/tppi/server" =
+    { device = "tank/home/tppi/server";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/tppi/server/dynmap" =
+    { device = "tank/home/tppi/server/dynmap";
+      fsType = "zfs";
+    };
+
+  swapDevices = [];
 
   nix.maxJobs = lib.mkDefault 8;
 }

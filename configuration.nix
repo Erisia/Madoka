@@ -321,7 +321,7 @@ in
   '';
   nixpkgs.config.allowUnfree = true;
 
-#  zramSwap.enable = true;
+  zramSwap.enable = true;
 
   # Workaround for inpure's server.
   networking.extraHosts = ''
