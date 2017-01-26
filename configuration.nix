@@ -300,7 +300,12 @@ in
       "incognito.brage.info" = base { "/".proxyPass = "http://incognito"; };
       "tppi-map.brage.info" = base { "/".proxyPass = "http://tppi"; };
       "cache.brage.info" = root "/home/svein/web/cache";
-      "znc.brage.info" = base { "/".proxyPass = "https://localhost:4000"; };
+      "znc.brage.info" = base { 
+         "/" = {
+           proxyPass = "https://localhost:4000";
+           extraConfig = "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;";
+         };
+      };
       "quest.brage.info" = proxy 2222;
       "warmroast.brage.info" = proxy 23000;
     };
