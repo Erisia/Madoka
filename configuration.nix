@@ -12,6 +12,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./minecraft.nix
+      ./mediawiki.nix
     ];
 
   ## Boot ##
@@ -71,7 +72,12 @@ in
   };
   networking.firewall = {
     allowPing = true;
-    allowedTCPPorts = [ 80 443 25565 25566 25567 4000 12345 ];
+    allowedTCPPorts = [ 
+      80 443  # Web-server. (nginx)
+      25565 25566 25567  # Minecraft
+      4000  # ZNC
+      4001  # IPFS
+    ];
     allowedUDPPorts = [
       34197 # Factorio
     ];
@@ -80,6 +86,8 @@ in
 
   ## Security ##
   security.sudo.wheelNeedsPassword = false;
+  security.pam.enableGoogleAuth = true;
+  services.openssh.passwordAuthentication = true;  # Ok because we require OTP.
   security.apparmor.enable = true;
   services.fail2ban.enable = true;
 
@@ -95,9 +103,12 @@ in
   #services.zfs.autoSnapshot.enable = true;
   services.locate.enable = true;
 
+  # IPFS
+  services.ipfs.enable = true;
+  services.ipfs.enableGC = true;
+
   # SSH
   services.openssh.enable = true;
-  services.openssh.passwordAuthentication = false;
 
   # Gitlab
   services.gitlab = {
@@ -117,12 +128,19 @@ in
   ## Users ##
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
 
-  # Next free ID: 1016.
+  # Next free ID: 1017.
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
     extraGroups = [ "wheel" "docker" ];
     openssh.authorizedKeys.keys = sshKeys.svein;
+  };
+  users.extraUsers.mei = {
+    isNormalUser = true;
+    uid = 1017;
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMZr+a9w5b6VyqkdNbepBSkjpKQBdAZHJRCRS9SnqVubQIhYg6WsYYOtjp0GKM2SK5MqcrLUQYiT2LDUFOtC4zFxgCcZ6IoAcVqDCiZH8oeDkZlo/Qv0boKovOAGxqf0IdC+KMDhDDMBczuhOECUonFi6ArsXg9JbRJ1xDkTvIftFyypcdM9LDFAxIEEMqx6iIu0ANLvSNvI4xLjiav9tP8+Ea5TPBTm4H0EpsJNA3YsQPuC5TvbVH0kIl1NTdG1CjeZgiMSAAQoNy15Ik1EDoCp/eRO9JzRYNmU4/Z+af5Ns6SP1e/uSYkxoQNneSSWzPRagdNbTN+wVKJ91qaFVL mei@mei-hevs"
+    ];
   };
   users.extraUsers.einsig = {
     isNormalUser = true;
@@ -282,7 +300,7 @@ in
       "incognito.brage.info" = base { "/".proxyPass = "http://incognito"; };
       "tppi-map.brage.info" = base { "/".proxyPass = "http://tppi"; };
       "cache.brage.info" = root "/home/svein/web/cache";
-      "znc.brage.info" = proxy 4000;
+      "znc.brage.info" = base { "/".proxyPass = "https://localhost:4000"; };
       "quest.brage.info" = proxy 2222;
       "warmroast.brage.info" = proxy 23000;
     };
