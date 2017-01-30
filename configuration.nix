@@ -77,6 +77,7 @@ in
       25565 25566 25567  # Minecraft
       4000  # ZNC
       4001  # IPFS
+      12345  # JMC's ZNC
     ];
     allowedUDPPorts = [
       34197 # Factorio
