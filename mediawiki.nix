@@ -33,6 +33,9 @@
             $wgGroupPermissions['bureaucrat']['usermerge'] = true;
             require_once "$IP/extensions/SimpleMathJax/SimpleMathJax.php";
             wfLoadExtension( 'WikiEditor' );
+
+            $wgGroupPermissions['*']['edit'] = false;
+            $wgGroupPermissions['*']['createaccount'] = false;
           '';
           extensions = [ ./wiki/extensions ];
         };
