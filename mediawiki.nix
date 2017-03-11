@@ -20,6 +20,8 @@
 #          enableUploads = true;
           defaultSkin = "vector";
           extraConfig = ''
+            $wgServer = 'https://wiki.brage.info';
+	  
             wfLoadSkin( 'CologneBlue' );
             wfLoadSkin( 'Modern' );
             wfLoadSkin( 'MonoBook' );
@@ -39,7 +41,7 @@
           local all all trust
         '';
         networking.firewall.allowedTCPPorts = [ 80 ];
-        environment.systemPackages = [ pkgs.postgresql ];
+        environment.systemPackages = [ pkgs.postgresql pkgs.tcpdump ];
       };
   };
 }
