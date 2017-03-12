@@ -21,7 +21,7 @@
 	  uploadDir = "/images/";
           defaultSkin = "vector";
           extraConfig = ''
-            $wgServer = 'https://wiki.brage.info';
+	    $wgServer = "https://wiki.brage.info/";
 	  
             wfLoadSkin( 'CologneBlue' );
             wfLoadSkin( 'Modern' );
@@ -45,7 +45,7 @@
           local all all trust
         '';
         networking.firewall.allowedTCPPorts = [ 80 ];
-        environment.systemPackages = [ pkgs.postgresql pkgs.tcpdump ];
+        environment.systemPackages = [ pkgs.postgresql ];
       };
   };
 }

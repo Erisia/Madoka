@@ -90,7 +90,6 @@ in
     externalInterface = "enp0s31f6";
     internalInterfaces = [ "ve-eln-wiki" ];
   };
-  
 
   ## Security ##
   security.sudo.wheelNeedsPassword = false;
@@ -231,12 +230,98 @@ in
 
 
   ## Webserver ##
-  systemd.services.caddy.serviceConfig.LimitNOFILE = 8192;
-  services.caddy = {
+  services.nginx = {
     enable = true;
-    agree = true;
-    email = "sveina@gmail.com";
-    config = builtins.readFile ./caddy.conf;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    sslDhparam = ./nginx/dhparams.pem;
+    statusPage = true;
+    appendHttpConfig = ''
+      add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
+      add_header X-Clacks-Overhead "GNU Terry Pratchett";
+      autoindex on;
+
+      # Fallback config for Erisia
+      upstream erisia {
+        server 127.0.0.1:8123;
+	server unix:/home/minecraft/erisia/staticmap.sock backup;
+      }
+      server {
+        listen unix:/home/minecraft/erisia/staticmap.sock;
+	location / {
+	  root /home/minecraft/erisia/dynmap/web;
+	}
+      }
+      # Ditto, Incognito.
+      # TODO: Factor this. Perhaps send a PR or two.
+      upstream incognito {
+        server 127.0.0.1:8124;
+	server unix:/home/minecraft/incognito/staticmap.sock backup;
+      }
+      server {
+        listen unix:/home/minecraft/incognito/staticmap.sock;
+	location / {
+	  root /home/minecraft/incognito/dynmap/web;
+	}
+      }
+      upstream tppi {
+        server 127.0.0.1:8126;
+        server unix:/home/tppi/server/staticmap.sock backup;
+      }
+      server {
+        listen unix:/home/tppi/server/staticmap.sock;
+        location / {
+          root /home/tppi/server/dynmap/web;
+        }
+      }
+      
+    '';
+    virtualHosts = let
+      base = locations: {
+        forceSSL = true;
+	enableACME = true;
+        inherit locations;
+      };
+      proxy = port: base {
+        "/".proxyPass = "http://localhost:" + toString(port) + "/";
+      };
+      root = dir: base {
+        "/".root = dir;
+      };
+    in {
+      "madoka.brage.info" = base {
+        "/" = {
+	  root = "/home/minecraft/web";
+	  tryFiles = "\$uri \$uri/ =404";
+	};
+	"/warmroast".proxyPass = "http://localhost:23000/";
+	"/baughn".extraConfig = "alias /home/svein/web;";
+	"/tppi".extraConfig = "alias /home/tppi/web;";
+      } // { default = true; };
+      "status.brage.info" = proxy 9090;
+      "tppi.brage.info" = root "/home/tppi/web";
+      "alertmanager.brage.info" = proxy 9093;
+      "map.brage.info" = base { "/".proxyPass = "http://erisia"; };
+      "incognito.brage.info" = base { "/".proxyPass = "http://incognito"; };
+      "tppi-map.brage.info" = base { "/".proxyPass = "http://tppi"; };
+      "cache.brage.info" = root "/home/svein/web/cache";
+      "znc.brage.info" = base { 
+         "/" = {
+           proxyPass = "https://localhost:4000";
+           extraConfig = "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;";
+         };
+      };
+      "quest.brage.info" = proxy 2222;
+      "warmroast.brage.info" = proxy 23000;
+      "wiki.brage.info" = base {
+        "/" = {
+	  proxyPass = "http://192.168.10.2";
+	  extraConfig = "rewrite ^(/)$ http://wiki.brage.info/wiki/ permanent;";
+	};
+      };
+    };
   };
 
   ## Docker
