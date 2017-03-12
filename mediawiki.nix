@@ -17,7 +17,8 @@
           id = "eln";
           siteName = "Electrical Wiki";
           logo = "https://electrical-age.net/assets/elnlogocube.png";
-#          enableUploads = true;
+          enableUploads = true;
+	  uploadDir = "/images/";
           defaultSkin = "vector";
           extraConfig = ''
             $wgServer = 'https://wiki.brage.info';
