@@ -77,7 +77,7 @@ in
       80 443  # Web-server. (nginx)
       25565 25566 25567  # Minecraft
       4000  # ZNC
-      4001  # IPFS
+      # 4001  # IPFS
       12345  # JMC's ZNC
     ];
     allowedUDPPorts = [
@@ -112,8 +112,8 @@ in
   services.locate.enable = true;
 
   # IPFS
-  services.ipfs.enable = true;
-  services.ipfs.enableGC = true;
+  # services.ipfs.enable = true;
+  # services.ipfs.enableGC = true;
 
   # SSH
   services.openssh.enable = true;
