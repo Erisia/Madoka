@@ -13,6 +13,7 @@ in
       ./hardware-configuration.nix
       ./minecraft.nix
       ./mediawiki.nix
+#      ./hydra.nix
     ];
 
   ## Boot ##
@@ -135,7 +136,7 @@ in
   ## Users ##
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
 
-  # Next free ID: 1017.
+  # Next free ID: 1019.
   users.extraUsers.svein = {
     isNormalUser = true;
     uid = 1004;
@@ -321,6 +322,7 @@ in
 	  extraConfig = "rewrite ^(/)$ http://wiki.brage.info/wiki/ permanent;";
 	};
       };
+      "hydra.brage.info" = proxy 3001;
     };
   };
 
