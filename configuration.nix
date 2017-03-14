@@ -94,7 +94,7 @@ in
 
   ## Security ##
   security.sudo.wheelNeedsPassword = false;
-  security.pam.enableGoogleAuth = true;
+#  security.pam.enableGoogleAuth = true;
   services.openssh.passwordAuthentication = true;  # Ok because we require OTP.
   security.apparmor.enable = true;
   services.fail2ban.enable = true;
