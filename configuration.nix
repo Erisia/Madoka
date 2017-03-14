@@ -247,36 +247,36 @@ in
       # Fallback config for Erisia
       upstream erisia {
         server 127.0.0.1:8123;
-	server unix:/home/minecraft/erisia/staticmap.sock backup;
+#	server unix:/home/minecraft/erisia/staticmap.sock backup;
       }
-      server {
-        listen unix:/home/minecraft/erisia/staticmap.sock;
-	location / {
-	  root /home/minecraft/erisia/dynmap/web;
-	}
-      }
+      # server {
+      #   listen unix:/home/minecraft/erisia/staticmap.sock;
+      # 	location / {
+      # 	  root /home/minecraft/erisia/dynmap/web;
+      # 	}
+      # }
       # Ditto, Incognito.
       # TODO: Factor this. Perhaps send a PR or two.
       upstream incognito {
         server 127.0.0.1:8124;
-	server unix:/home/minecraft/incognito/staticmap.sock backup;
+	# server unix:/home/minecraft/incognito/staticmap.sock backup;
       }
-      server {
-        listen unix:/home/minecraft/incognito/staticmap.sock;
-	location / {
-	  root /home/minecraft/incognito/dynmap/web;
-	}
-      }
+      # server {
+      #   listen unix:/home/minecraft/incognito/staticmap.sock;
+      # 	location / {
+      # 	  root /home/minecraft/incognito/dynmap/web;
+      # 	}
+      # }
       upstream tppi {
         server 127.0.0.1:8126;
-        server unix:/home/tppi/server/staticmap.sock backup;
+        # server unix:/home/tppi/server/staticmap.sock backup;
       }
-      server {
-        listen unix:/home/tppi/server/staticmap.sock;
-        location / {
-          root /home/tppi/server/dynmap/web;
-        }
-      }
+      # server {
+      #   listen unix:/home/tppi/server/staticmap.sock;
+      #   location / {
+      #     root /home/tppi/server/dynmap/web;
+      #   }
+      # }
       
     '';
     virtualHosts = let
